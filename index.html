@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐼 เรียนภาษาจีนกับแพนด้า!</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ====== GLOBAL UI ====== -->
+<div id="global-ui">
+  <button id="btn-home" class="icon-btn" title="กลับหน้าแรก" onclick="goHome()">🏠</button>
+  <button id="btn-sound" class="icon-btn" title="เปิด/ปิดเสียง" onclick="toggleSound()">🔊</button>
+  <div id="global-score">⭐ <span id="total-score">0</span></div>
+</div>
+
+<!-- ====== SCREEN: HOME ====== -->
+<div id="screen-home" class="screen active">
+  <div class="home-bg">
+    <div class="cloud cloud1">☁️</div>
+    <div class="cloud cloud2">☁️</div>
+    <div class="cloud cloud3">☁️</div>
+  </div>
+  <div class="home-content">
+    <div class="panda-mascot">🐼</div>
+    <h1 class="home-title">เรียนภาษาจีน<br/>กับแพนด้า!</h1>
+    <p class="home-subtitle">学中文 • Learn Chinese • เรียนสนุก!</p>
+    <button class="btn-start bounce" onclick="goToGameSelect()">▶ เริ่มเล่น!</button>
+    <button class="btn-scores" onclick="showScores()">🏆 คะแนนสะสม</button>
+  </div>
+  <div class="home-deco">
+    <span class="deco-char" style="--d:0s">你好</span>
+    <span class="deco-char" style="--d:0.5s">中文</span>
+    <span class="deco-char" style="--d:1s">学习</span>
+    <span class="deco-char" style="--d:1.5s">快乐</span>
+  </div>
+</div>
+
+<!-- ====== SCREEN: GAME SELECT ====== -->
+<div id="screen-select" class="screen">
+  <h2 class="page-title">🎮 เลือกเกม</h2>
+  <div class="game-cards">
+
+    <div class="game-card" onclick="startGame('balloon')">
+      <div class="card-emoji">🎈</div>
+      <h3>ยิงลูกโป่ง</h3>
+      <p>ยิงลูกโป่งที่มีคำศัพท์ถูกต้อง!</p>
+      <div class="card-stars">★★★</div>
+    </div>
+
+    <div class="game-card" onclick="startGame('basket')">
+      <div class="card-emoji">🧺</div>
+      <h3>ลากเข้าตะกร้า</h3>
+      <p>ลากสิ่งของเข้าหมวดหมู่ที่ถูก!</p>
+      <div class="card-stars">★★★</div>
+    </div>
+
+    <div class="game-card" onclick="startGame('runner')">
+      <div class="card-emoji">🏃</div>
+      <h3>วิ่งเก็บคำศัพท์</h3>
+      <p>กระโดดเก็บคำศัพท์ที่ถูกต้อง!</p>
+      <div class="card-stars">★★★</div>
+    </div>
+
+  </div>
+  <div class="best-scores-mini">
+    <span>🥇 สูงสุด: ลูกโป่ง <b id="best-balloon">0</b> | ตะกร้า <b id="best-basket">0</b> | วิ่ง <b id="best-runner">0</b></span>
+  </div>
+</div>
+
+<!-- ====== SCREEN: SCORES ====== -->
+<div id="screen-scores" class="screen">
+  <h2 class="page-title">🏆 คะแนนสะสม</h2>
+  <div class="scores-board">
+    <div class="score-row">
+      <span class="score-icon">🎈</span>
+      <span class="score-label">ยิงลูกโป่ง</span>
+      <span class="score-val" id="score-balloon">0</span>
+    </div>
+    <div class="score-row">
+      <span class="score-icon">🧺</span>
+      <span class="score-label">ลากเข้าตะกร้า</span>
+      <span class="score-val" id="score-basket">0</span>
+    </div>
+    <div class="score-row">
+      <span class="score-icon">🏃</span>
+      <span class="score-label">วิ่งเก็บคำศัพท์</span>
+      <span class="score-val" id="score-runner">0</span>
+    </div>
+    <div class="score-total-row">
+      <span>⭐ คะแนนรวม</span>
+      <span id="score-total">0</span>
+    </div>
+  </div>
+  <button class="btn-reset" onclick="resetScores()">🗑️ รีเซ็ตคะแนน</button>
+</div>
+
+<!-- ====== SCREEN: GAME BALLOON ====== -->
+<div id="screen-balloon" class="screen">
+  <div class="game-header">
+    <div class="game-info">
+      <span>🎯 คะแนน: <b id="balloon-score">0</b></span>
+      <span>⏱️ <b id="balloon-timer">30</b>s</span>
+    </div>
+    <div class="game-question">ยิงลูกโป่ง: <span id="balloon-question" class="zh-word"></span></div>
+    <div id="balloon-meaning" class="meaning-tag"></div>
+  </div>
+  <div id="balloon-arena" class="balloon-arena"></div>
+  <div id="balloon-result" class="game-result hidden">
+    <div class="result-box">
+      <div class="result-emoji" id="balloon-result-emoji">🎉</div>
+      <h3>จบแล้ว!</h3>
+      <p>คะแนน: <b id="balloon-final-score">0</b></p>
+      <button class="btn-play-again" onclick="startGame('balloon')">🔄 เล่นอีกครั้ง</button>
+      <button class="btn-play-again secondary" onclick="goToGameSelect()">📋 เลือกเกม</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SCREEN: GAME BASKET ====== -->
+<div id="screen-basket" class="screen">
+  <div class="game-header">
+    <div class="game-info">
+      <span>🎯 คะแนน: <b id="basket-score">0</b></span>
+      <span>🔄 <b id="basket-remaining">0</b> ชิ้น</span>
+    </div>
+  </div>
+  <div id="basket-game-area" class="basket-game-area">
+    <div class="baskets-row" id="baskets-row"></div>
+    <div class="items-area" id="items-area"></div>
+  </div>
+  <div id="basket-result" class="game-result hidden">
+    <div class="result-box">
+      <div class="result-emoji">🏆</div>
+      <h3>เก่งมาก!</h3>
+      <p>คะแนน: <b id="basket-final-score">0</b></p>
+      <button class="btn-play-again" onclick="startGame('basket')">🔄 เล่นอีกครั้ง</button>
+      <button class="btn-play-again secondary" onclick="goToGameSelect()">📋 เลือกเกม</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SCREEN: GAME RUNNER ====== -->
+<div id="screen-runner" class="screen">
+  <div class="game-header">
+    <div class="game-info">
+      <span>🎯 คะแนน: <b id="runner-score">0</b></span>
+      <span>❤️ <b id="runner-lives">3</b></span>
+    </div>
+    <div class="game-question">เก็บคำว่า: <span id="runner-question" class="zh-word"></span>
+      <span id="runner-meaning" class="meaning-tag"></span>
+    </div>
+  </div>
+  <canvas id="runner-canvas"></canvas>
+  <div class="runner-controls">
+    <button id="runner-jump-btn" class="jump-btn" ontouchstart="runnerJump()" onmousedown="runnerJump()">🦘 กระโดด!</button>
+  </div>
+  <div id="runner-result" class="game-result hidden">
+    <div class="result-box">
+      <div class="result-emoji">🏁</div>
+      <h3>Game Over!</h3>
+      <p>คะแนน: <b id="runner-final-score">0</b></p>
+      <button class="btn-play-again" onclick="startGame('runner')">🔄 เล่นอีกครั้ง</button>
+      <button class="btn-play-again secondary" onclick="goToGameSelect()">📋 เลือกเกม</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TOAST NOTIFICATION ====== -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
